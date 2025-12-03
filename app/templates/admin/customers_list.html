@@ -1,0 +1,39 @@
+{% extends "layouts/admin_base.html" %}
+{% set page_title = "Customers" %}
+{% set page_subtitle = "Manage customer records and contact details." %}
+{% block admin_actions %}
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.new_customer') }}">New Customer</a>
+{% endblock %}
+{% block admin_content %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.city }}</td>
+                <td class="text-end">
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('admin.edit_customer', customer_id=customer.id) }}">Edit</a>
+                    <form method="post" action="{{ url_for('admin.delete_customer', customer_id=customer.id) }}" class="d-inline">
+                        <button class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this customer?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center text-muted">No customers found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

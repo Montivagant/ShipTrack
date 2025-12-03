@@ -1,0 +1,61 @@
+{% extends "layouts/admin_base.html" %}
+{% set page_title = "Shipment Detail" %}
+{% set page_subtitle = "Timeline and assignment for this shipment." %}
+{% block admin_actions %}
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.edit_shipment', shipment_id=shipment.id) }}">Edit shipment</a>
+{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between mb-3">
+    <div>
+        <h2 class="h5 mb-1">Tracking #{{ shipment.tracking_number }}</h2>
+        <p class="text-muted mb-0">Customer: {{ shipment.customer.first_name }} {{ shipment.customer.last_name }}</p>
+    </div>
+</div>
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="p-3 bg-light rounded border">
+            <h3 class="h6">Details</h3>
+            <p class="mb-1"><strong>Sender:</strong> {{ shipment.sender_address }}</p>
+            <p class="mb-1"><strong>Receiver:</strong> {{ shipment.receiver_address }}</p>
+            <p class="mb-1"><strong>City:</strong> {{ shipment.city or 'N/A' }}</p>
+            <p class="mb-1"><strong>Requested:</strong> {{ shipment.requested_date }}</p>
+            <p class="mb-1"><strong>Assigned Courier:</strong>
+                {% if shipment.courier %}
+                    {{ shipment.courier.first_name }} {{ shipment.courier.last_name }} ({{ shipment.courier.region }})
+                {% else %}
+                    Unassigned
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="p-3 bg-light rounded border">
+            <h3 class="h6">Current Status</h3>
+            <p class="fs-5">
+                <span class="badge text-bg-{{ status_badge(shipment.latest_status()) }}">{{ shipment.latest_status() }}</span>
+            </p>
+            {% set hint = status_hint(shipment.latest_status()) %}
+            {% if hint %}<p class="text-muted small mb-0">{{ hint }}</p>{% endif %}
+        </div>
+    </div>
+</div>
+<hr>
+<h3 class="h6">Tracking Timeline</h3>
+<ul class="list-group">
+    {% for event in shipment.tracking_events %}
+        <li class="list-group-item d-flex justify-content-between timeline-item">
+            <div>
+                <div class="fw-semibold">{{ event.status }}</div>
+                <div class="small text-muted">{{ event.location_description }}</div>
+                {% if event.proof_url %}<div class="small"><a href="{{ event.proof_url }}" target="_blank">View proof</a></div>{% endif %}
+                {% if event.notes %}<div class="small">{{ event.notes }}</div>{% endif %}
+            </div>
+            <div class="text-end small text-muted">
+                {{ event.created_at.strftime('%Y-%m-%d %H:%M') }}
+            </div>
+        </li>
+    {% else %}
+        <li class="list-group-item text-muted">No tracking events yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

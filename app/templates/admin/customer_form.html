@@ -1,0 +1,44 @@
+{% extends "layouts/admin_base.html" %}
+{% if customer %}
+    {% set page_title = "Edit Customer" %}
+    {% set page_subtitle = "Update customer contact and address information." %}
+    {% set action_url = url_for('admin.update_customer', customer_id=customer.id) %}
+{% else %}
+    {% set page_title = "New Customer" %}
+    {% set page_subtitle = "Add a new customer for shipment bookings." %}
+    {% set action_url = url_for('admin.create_customer') %}
+{% endif %}
+{% block admin_content %}
+<form method="post" action="{{ action_url }}">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">First Name</label>
+            <input required name="first_name" class="form-control" value="{{ customer.first_name if customer else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Last Name</label>
+            <input required name="last_name" class="form-control" value="{{ customer.last_name if customer else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input required type="email" name="email" class="form-control" value="{{ customer.email if customer else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input required name="phone" class="form-control" value="{{ customer.phone if customer else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Address</label>
+            <input required name="address" class="form-control" value="{{ customer.address if customer else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">City</label>
+            <input required name="city" class="form-control" value="{{ customer.city if customer else '' }}">
+        </div>
+    </div>
+    <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-secondary" href="{{ url_for('admin.customers') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+{% if back_url %}
+    <a class="text-decoration-none small text-muted d-inline-flex align-items-center mb-2" href="{{ back_url }}">
+        <span class="me-1">&larr;</span>{{ back_label or "Back" }}
+    </a>
+{% endif %}
+<div class="section-header mb-3">
+    <div>
+        <h1 class="h4 title mb-1">{{ page_title or "Courier Dashboard" }}</h1>
+        <p class="text-muted small mb-0">{{ page_subtitle or "View and update your assigned shipments." }}</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        {% block courier_actions %}{% endblock %}
+    </div>
+</div>
+<ul class="nav nav-pills pill-nav mb-3">
+    <li class="nav-item"><a class="nav-link {% if 'dashboard' in request.endpoint %}active{% endif %}" href="{{ url_for('courier.dashboard') }}">Dashboard</a></li>
+</ul>
+<div class="card">
+    <div class="card-body">
+        {% block courier_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

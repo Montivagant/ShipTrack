@@ -1,0 +1,229 @@
+:root {
+    --app-bg: #f4f6fb;
+    --app-surface: #ffffff;
+    --app-primary: #0f172a;
+    --app-accent: #6366f1;
+    --app-muted: #6b7280;
+    --app-border: #e5e7eb;
+}
+
+* {
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.app-body {
+    background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.07), transparent 32%),
+                radial-gradient(circle at 80% 0%, rgba(15, 23, 42, 0.06), transparent 28%),
+                var(--app-bg);
+    min-height: 100vh;
+}
+
+.app-navbar {
+    background: linear-gradient(135deg, var(--app-primary), #1d2b4f);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card {
+    border: 1px solid var(--app-border);
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+    background: var(--app-surface);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+.card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
+    margin-bottom: 0.25rem;
+}
+
+.pill-nav .nav-link {
+    border-radius: 999px;
+    color: var(--app-primary);
+    border: 1px solid transparent;
+}
+
+.pill-nav .nav-link.active {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: var(--app-primary);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-header .title {
+    margin: 0;
+    color: var(--app-primary);
+}
+
+.text-muted {
+    color: var(--app-muted) !important;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    color: var(--app-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--app-border);
+    background: #f8fafc;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #fcfdff;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f3f6ff;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    border-color: var(--app-border);
+}
+
+.btn-primary {
+    background: var(--app-accent);
+    border-color: var(--app-accent);
+}
+
+.btn-outline-light {
+    color: var(--app-surface);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.helper-text {
+    color: var(--app-muted);
+    font-size: 0.9rem;
+}
+
+.stat-tile {
+    border-radius: 12px;
+    border: 1px solid var(--app-border);
+    background: linear-gradient(145deg, #ffffff, #f6f8ff);
+    padding: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-tile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: #f8fafc;
+    border: 1px solid var(--app-border);
+    color: var(--app-primary);
+    font-weight: 600;
+    text-transform: none;
+}
+
+.status-picker .btn-check:checked + label {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: var(--app-primary);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.status-picker label {
+    transition: all 0.15s ease;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 1.75rem;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.6rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--app-accent);
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.12);
+}
+
+.timeline-item + .timeline-item {
+    margin-top: 0.5rem;
+    border-top: 1px dashed var(--app-border);
+    padding-top: 0.85rem;
+}
+
+.spinner-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.15);
+    backdrop-filter: blur(2px);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.spinner-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #e5e7eb;
+    border-top-color: var(--app-accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-header .btn,
+    .pill-nav .nav-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav.pill-nav {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .table-responsive {
+        border-radius: 0.75rem;
+        background: #fff;
+        border: 1px solid var(--app-border);
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.01);
+    }
+
+    .card {
+        margin-bottom: 1rem;
+    }
+}

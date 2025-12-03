@@ -1,0 +1,47 @@
+{% extends "layouts/admin_base.html" %}
+{% if courier %}
+    {% set page_title = "Edit Courier" %}
+    {% set page_subtitle = "Keep courier contact and region up to date." %}
+    {% set action_url = url_for('admin.update_courier', courier_id=courier.id) %}
+{% else %}
+    {% set page_title = "New Courier" %}
+    {% set page_subtitle = "Add a courier and generate a temporary password." %}
+    {% set action_url = url_for('admin.create_courier') %}
+{% endif %}
+{% block admin_content %}
+<form method="post" action="{{ action_url }}">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">First Name</label>
+            <input required name="first_name" class="form-control" value="{{ courier.first_name if courier else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Last Name</label>
+            <input required name="last_name" class="form-control" value="{{ courier.last_name if courier else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input required type="email" name="email" class="form-control" value="{{ courier.email if courier else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Phone</label>
+            <input required name="phone" class="form-control" value="{{ courier.phone if courier else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Region</label>
+            <input required name="region" class="form-control" value="{{ courier.region if courier else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Hire Date</label>
+            <input type="date" name="hire_date" class="form-control" value="{{ courier.hire_date if courier else '' }}">
+        </div>
+    </div>
+    <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-secondary" href="{{ url_for('admin.couriers') }}">Cancel</a>
+    </div>
+    {% if not courier %}
+        <p class="text-muted small mt-2">A temporary password will be generated and shown after creation.</p>
+    {% endif %}
+</form>
+{% endblock %}

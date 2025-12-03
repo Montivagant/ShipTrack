@@ -1,0 +1,41 @@
+{% extends "layouts/admin_base.html" %}
+{% set page_title = "Couriers" %}
+{% set page_subtitle = "Manage courier accounts and assignments." %}
+{% block admin_actions %}
+    <a class="btn btn-primary btn-sm" href="{{ url_for('admin.new_courier') }}">New Courier</a>
+{% endblock %}
+{% block admin_content %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Region</th>
+                <th>Hire Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for courier in couriers %}
+            <tr>
+                <td>{{ courier.first_name }} {{ courier.last_name }}</td>
+                <td>{{ courier.email }}</td>
+                <td>{{ courier.phone }}</td>
+                <td>{{ courier.region }}</td>
+                <td>{{ courier.hire_date }}</td>
+                <td class="text-end">
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('admin.edit_courier', courier_id=courier.id) }}">Edit</a>
+                    <form method="post" action="{{ url_for('admin.delete_courier', courier_id=courier.id) }}" class="d-inline">
+                        <button class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this courier?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+                <tr><td colspan="6" class="text-center text-muted">No couriers found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "layouts/admin_base.html" %}
+{% if shipment %}
+    {% set page_title = "Edit Shipment" %}
+    {% set page_subtitle = "Update shipment addresses, timing, or courier assignment." %}
+    {% set action_url = url_for('admin.update_shipment', shipment_id=shipment.id) %}
+{% else %}
+    {% set page_title = "New Shipment" %}
+    {% set page_subtitle = "Create a shipment and generate a tracking number." %}
+    {% set action_url = url_for('admin.create_shipment') %}
+{% endif %}
+{% block admin_content %}
+<form method="post" action="{{ action_url }}">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Customer</label>
+            <select required name="customer_id" class="form-select">
+                <option value="">Select customer</option>
+                {% for customer in customers %}
+                    <option value="{{ customer.id }}" {% if shipment and shipment.customer_id==customer.id %}selected{% endif %}>
+                        {{ customer.first_name }} {{ customer.last_name }} ({{ customer.city }})
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Assign Courier (optional)</label>
+            <select name="assigned_courier_id" class="form-select">
+                <option value="">Unassigned</option>
+                {% for courier in couriers %}
+                    <option value="{{ courier.id }}" {% if shipment and shipment.assigned_courier_id==courier.id %}selected{% endif %}>
+                        {{ courier.first_name }} {{ courier.last_name }} - {{ courier.region }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Sender Address</label>
+            <input required name="sender_address" class="form-control" value="{{ shipment.sender_address if shipment else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Receiver Address</label>
+            <input required name="receiver_address" class="form-control" value="{{ shipment.receiver_address if shipment else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">City</label>
+            <input name="city" class="form-control" value="{{ shipment.city if shipment else '' }}">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Requested Date</label>
+            <input type="datetime-local" name="requested_date" class="form-control"
+                value="{{ shipment.requested_date.strftime('%Y-%m-%dT%H:%M') if shipment else '' }}">
+        </div>
+        {% if shipment %}
+            <div class="col-md-6">
+                <label class="form-label">Tracking Number</label>
+                <input readonly class="form-control" value="{{ shipment.tracking_number }}">
+            </div>
+        {% endif %}
+    </div>
+    <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-secondary" href="{{ url_for('admin.shipments') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

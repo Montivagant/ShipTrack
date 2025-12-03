@@ -1,0 +1,47 @@
+{% extends "layouts/admin_base.html" %}
+{% set page_title = "Dashboard" %}
+{% set page_subtitle = "Quick view of shipments and team activity." %}
+{% block admin_content %}
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="stat-tile">
+            <div class="fw-semibold text-uppercase small mb-1 text-muted">Total Shipments</div>
+            <div class="display-6">{{ metrics.total_shipments }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-tile">
+            <div class="fw-semibold text-uppercase small mb-1 text-muted">Couriers</div>
+            <div class="display-6">{{ metrics.couriers }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-tile">
+            <div class="fw-semibold text-uppercase small mb-1 text-muted">Customers</div>
+            <div class="display-6">{{ metrics.customers }}</div>
+        </div>
+    </div>
+</div>
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h2 class="h6 mb-0">Shipments by Status</h2>
+            <a class="btn btn-outline-primary btn-sm" href="{{ url_for('admin.shipments') }}">Go to Shipments</a>
+        </div>
+        <div class="row g-2">
+            {% for status, count in metrics.status_counts.items() %}
+                <div class="col-md-3">
+                    <div class="p-3 bg-light border rounded">
+                        <div class="fw-semibold">{{ status }}</div>
+                        <div class="fs-4">{{ count }}</div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-muted mb-0">No shipments yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

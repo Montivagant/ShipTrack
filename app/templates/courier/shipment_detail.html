@@ -1,0 +1,46 @@
+{% extends "layouts/courier_base.html" %}
+{% set page_title = "Shipment Detail" %}
+{% set page_subtitle = "Review info and post tracking updates." %}
+{% block courier_actions %}
+    <a class="btn btn-light btn-sm" href="{{ url_for('courier.track_shipment', shipment_id=shipment.id) }}">Add tracking event</a>
+{% endblock %}
+{% block courier_content %}
+<a class="text-decoration-none small text-muted d-inline-flex align-items-center mb-2" href="{{ url_for('courier.dashboard') }}">
+    <span class="me-1">&larr;</span>Back to my shipments
+</a>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="h6 mb-1">Tracking #{{ shipment.tracking_number }}</h2>
+        <p class="mb-0 text-muted">Customer: {{ shipment.customer.first_name }} {{ shipment.customer.last_name }}</p>
+    </div>
+</div>
+<div class="p-3 bg-light border rounded mb-3">
+    <div class="row">
+        <div class="col-md-6">
+            <p class="mb-1"><strong>Sender:</strong> {{ shipment.sender_address }}</p>
+            <p class="mb-1"><strong>Receiver:</strong> {{ shipment.receiver_address }}</p>
+        </div>
+        <div class="col-md-6">
+            <p class="mb-1"><strong>City:</strong> {{ shipment.city or 'N/A' }}</p>
+            <p class="mb-1"><strong>Requested:</strong> {{ shipment.requested_date }}</p>
+            <p class="mb-1"><strong>Status:</strong> <span class="badge text-bg-{{ status_badge(shipment.latest_status()) }}">{{ shipment.latest_status() }}</span></p>
+        </div>
+    </div>
+</div>
+<h3 class="h6">Tracking Timeline</h3>
+<ul class="list-group">
+    {% for event in shipment.tracking_events %}
+        <li class="list-group-item d-flex justify-content-between timeline-item">
+            <div>
+                <div class="fw-semibold">{{ event.status }}</div>
+                <div class="small text-muted">{{ event.location_description }}</div>
+                {% if event.proof_url %}<div class="small"><a href="{{ event.proof_url }}" target="_blank">View proof</a></div>{% endif %}
+                {% if event.notes %}<div class="small">{{ event.notes }}</div>{% endif %}
+            </div>
+            <div class="text-end small text-muted">{{ event.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+        </li>
+    {% else %}
+        <li class="list-group-item text-muted">No tracking events yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

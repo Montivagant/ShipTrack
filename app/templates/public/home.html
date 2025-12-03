@@ -1,0 +1,97 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="row g-4 align-items-center mb-4">
+    <div class="col-lg-6">
+        <p class="text-uppercase small text-muted mb-2">ShipTrack</p>
+        <h1 class="display-6 fw-semibold mb-3">Simple shipment visibility for everyone</h1>
+        <p class="text-muted mb-4">Track parcels, coordinate couriers, and keep customers informed with clear timelines and statuses.</p>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form class="row g-2 align-items-end" method="post" action="{{ url_for('public.track') }}">
+                    <div class="col-md-8">
+                        <label class="form-label">Tracking number</label>
+                        <input required name="tracking_number" class="form-control form-control-lg" placeholder="TRK-XXXX">
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button class="btn btn-primary btn-lg">Track now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Team portals</h2>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="p-3 rounded border h-100">
+                            <div class="fw-semibold mb-1">Admin</div>
+                            <p class="text-muted small mb-3">Manage customers, couriers, and shipments.</p>
+                            <a class="btn btn-dark w-100" href="{{ url_for('auth.admin_login') }}">Go to admin</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-3 rounded border h-100">
+                            <div class="fw-semibold mb-1">Courier</div>
+                            <p class="text-muted small mb-3">Update delivery statuses with proof links.</p>
+                            <a class="btn btn-outline-dark w-100" href="{{ url_for('auth.courier_login') }}">Go to courier</a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="fw-semibold">Need help?</div>
+                        <div class="text-muted small">Submit a support ticket for quick assistance.</div>
+                    </div>
+                    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('support.new_ticket') }}">Contact support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-tile h-100">
+            <div class="fw-semibold mb-1">Live timelines</div>
+            <p class="text-muted mb-0">Clear status timeline for every shipment so customers aren’t left guessing.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-tile h-100">
+            <div class="fw-semibold mb-1">Proof-ready</div>
+            <p class="text-muted mb-0">Couriers attach notes and proof links for deliveries or returns.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-tile h-100">
+            <div class="fw-semibold mb-1">Support loop</div>
+            <p class="text-muted mb-0">Tickets flow to admins with comments and status updates.</p>
+        </div>
+    </div>
+</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="h5 mb-3">How it works</h2>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="fw-semibold">1. Create</div>
+                <p class="text-muted small mb-0">Admins log shipments and assign couriers.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="fw-semibold">2. Update</div>
+                <p class="text-muted small mb-0">Couriers post status, notes, and proof links.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="fw-semibold">3. Track</div>
+                <p class="text-muted small mb-0">Customers view timelines and ETAs.</p>
+            </div>
+            <div class="col-md-3">
+                <div class="fw-semibold">4. Support</div>
+                <p class="text-muted small mb-0">Tickets routed to admins for quick resolution.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

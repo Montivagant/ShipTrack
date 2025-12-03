@@ -1,0 +1,73 @@
+{% extends "layouts/admin_base.html" %}
+{% set page_title = "Ticket #" ~ ticket.id %}
+{% set page_subtitle = ticket.subject %}
+{% block admin_content %}
+<div class="row g-3">
+    <div class="col-lg-5">
+        <div class="card h-100">
+            <div class="card-body">
+                <p class="text-uppercase small text-muted mb-1">Requester</p>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="fw-semibold">{{ ticket.name }}</div>
+                        <div class="small text-muted">{{ ticket.email }}</div>
+                        <div class="small text-muted">Role: {{ ticket.role|capitalize }}</div>
+                        {% if ticket.tracking_number %}<div class="small">Tracking: {{ ticket.tracking_number }}</div>{% endif %}
+                    </div>
+                    <span class="badge text-bg-{{ 'success' if ticket.status in ['Resolved','Closed'] else 'warning' if ticket.status=='In Progress' else 'secondary' }}">{{ ticket.status }}</span>
+                </div>
+                <hr>
+                <p class="fw-semibold mb-1">Message</p>
+                <p class="mb-0">{{ ticket.description }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card h-100">
+            <div class="card-body">
+                <form method="post" class="mb-3">
+                    <input type="hidden" name="action" value="status">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <select name="status" class="form-select">
+                                {% for s in statuses %}
+                                    <option value="{{ s }}" {% if ticket.status==s %}selected{% endif %}>{{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-grid">
+                            <button class="btn btn-primary">Update Status</button>
+                        </div>
+                    </div>
+                </form>
+                <form method="post">
+                    <input type="hidden" name="action" value="comment">
+                    <div class="mb-2">
+                        <label class="form-label">Add internal comment</label>
+                        <textarea name="comment" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm">Add Comment</button>
+                </form>
+                <hr>
+                <h3 class="h6">Comments</h3>
+                <ul class="list-group">
+                    {% for c in ticket.comments %}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="fw-semibold">{{ c.author }}</div>
+                                    <div class="small">{{ c.body }}</div>
+                                </div>
+                                <div class="small text-muted">{{ c.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">No comments yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
