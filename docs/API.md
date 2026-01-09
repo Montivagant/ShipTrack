@@ -28,6 +28,8 @@ Server-rendered HTML endpoints grouped by role. All protected routes use the ses
   - `GET /admin/shipments/new`
   - `POST /admin/shipments`
   - `GET /admin/shipments/<id>`
+  - `GET /admin/shipments/<id>/print` (PDF snapshot)
+  - `GET /admin/shipments/<id>/receipt` (PDF receipt, delivered only)
   - `GET /admin/shipments/<id>/edit`
   - `POST /admin/shipments/<id>/update`
   - `POST /admin/shipments/<id>/delete`
@@ -37,6 +39,8 @@ Server-rendered HTML endpoints grouped by role. All protected routes use the ses
 ## Courier
 - `GET /courier/dashboard`
 - `GET /courier/shipments/<id>`
+- `GET /courier/shipments/<id>/print` (PDF snapshot)
+- `GET /courier/shipments/<id>/receipt` (PDF receipt, delivered only)
 - `GET /courier/shipments/<id>/track`
 - `POST /courier/shipments/<id>/track` (fields: `status`, `location_description`, `notes` optional, `proof_url` optional)
 
@@ -44,6 +48,8 @@ Server-rendered HTML endpoints grouped by role. All protected routes use the ses
 - `GET /` — landing with track form
 - `GET /track` — track form/view
 - `POST /track` — lookup by tracking number
+- `GET /track/print?tracking_number=...` (PDF snapshot)
+- `GET /track/receipt?tracking_number=...` (PDF receipt, delivered only)
 
 ## Support (extra feature)
 - `GET /support/new` / `POST /support/new` — public ticket submission (fields: name, email, role, tracking_number optional, subject, description).

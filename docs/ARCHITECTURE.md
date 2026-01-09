@@ -13,6 +13,7 @@
 - `app/routes/*`: blueprints for admin, courier, public, and auth flows.
 - `app/routes/support.py`: support ticket submission/list/detail (extra feature).
 - `app/auth_utils.py`: password hashing/verification and `login_required` decorator.
+- `app/print_utils.py`: PDF generation helpers for shipment snapshots and delivery receipts.
 - Templates under `app/templates/` grouped by role; shared layouts in `app/templates/layouts/`.
 - `init_db.py`: helper to create tables.
 - `seed_data.py`: inserts default admin, couriers, customers, shipments, and tracking events.
@@ -43,6 +44,9 @@
   - Adds tracking events (status, location, notes) for assigned shipments.
 - **Public**
   - Track page for status lookup by tracking number with full timeline.
+- **Print/Receipt**
+  - Shipment snapshot PDFs are available to roles with access to the shipment.
+  - Delivery receipt PDFs are available only when the latest status is "Delivered".
 - **Support (extra)**
   - Public ticket submission form for customers/couriers.
   - Admin ticket list and detail with status updates and comments.
@@ -62,3 +66,5 @@
 - Temporary courier passwords are shown once via flash; couriers should change them later (not implemented in scope).
 - SQLite is sufficient for the project scope; no migrations are used.
 - Support ticketing is an optional extra module kept lightweight (no email integration).
+- Delivery receipts use the latest "Delivered" tracking event timestamp.
+- PDFs use built-in fonts; non-Latin characters are replaced to avoid encoding errors.

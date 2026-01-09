@@ -3,3 +3,4 @@ Flask_SQLAlchemy>=3.1.1
 SQLAlchemy>=2.0.0
 bcrypt>=4.0.1
 python-dotenv>=1.0.0
+fpdf2>=2.7.7

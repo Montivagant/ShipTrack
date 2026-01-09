@@ -46,6 +46,12 @@
                     <p class="mb-1"><strong>Requested:</strong> {{ shipment.requested_date }}</p>
                     {% set hint = status_hint(shipment.latest_status()) %}
                     {% if hint %}<p class="text-muted small mb-0">{{ hint }}</p>{% endif %}
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <a class="btn btn-outline-primary btn-sm" target="_blank" href="{{ url_for('public.print_shipment', tracking_number=shipment.tracking_number) }}">Print PDF</a>
+                        {% if shipment.latest_status() == 'Delivered' %}
+                            <a class="btn btn-outline-success btn-sm" target="_blank" href="{{ url_for('public.print_receipt', tracking_number=shipment.tracking_number) }}">Print Receipt</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

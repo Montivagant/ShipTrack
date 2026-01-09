@@ -3,6 +3,10 @@
 {% set page_subtitle = "Timeline and assignment for this shipment." %}
 {% block admin_actions %}
     <a class="btn btn-primary btn-sm" href="{{ url_for('admin.edit_shipment', shipment_id=shipment.id) }}">Edit shipment</a>
+    <a class="btn btn-outline-primary btn-sm" target="_blank" href="{{ url_for('admin.print_shipment', shipment_id=shipment.id) }}">Print PDF</a>
+    {% if shipment.latest_status() == 'Delivered' %}
+        <a class="btn btn-outline-success btn-sm" target="_blank" href="{{ url_for('admin.print_receipt', shipment_id=shipment.id) }}">Print Receipt</a>
+    {% endif %}
 {% endblock %}
 {% block admin_content %}
 <div class="d-flex justify-content-between mb-3">

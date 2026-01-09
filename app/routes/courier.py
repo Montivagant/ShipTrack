@@ -1,10 +1,12 @@
 from datetime import datetime
+from io import BytesIO
 
-from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, g, redirect, render_template, request, send_file, url_for
 
 from app import db
 from app.auth_utils import login_required
 from app.models import Courier, Shipment, TrackingEvent
+from app.print_utils import build_receipt_pdf, build_shipment_pdf, find_latest_delivered_event
 
 courier_bp = Blueprint("courier", __name__, url_prefix="/courier")
 
@@ -34,6 +36,41 @@ def shipment_detail(shipment_id):
     courier = _get_courier()
     shipment = Shipment.query.filter_by(id=shipment_id, assigned_courier_id=courier.id).first_or_404()
     return render_template("courier/shipment_detail.html", shipment=shipment)
+
+
+@courier_bp.route("/shipments/<int:shipment_id>/print")
+@login_required(role="courier")
+def print_shipment(shipment_id):
+    courier = _get_courier()
+    shipment = Shipment.query.filter_by(id=shipment_id, assigned_courier_id=courier.id).first_or_404()
+    pdf_bytes = build_shipment_pdf(shipment)
+    filename = f"{shipment.tracking_number}.pdf"
+    return send_file(
+        BytesIO(pdf_bytes),
+        mimetype="application/pdf",
+        as_attachment=False,
+        download_name=filename,
+    )
+
+
+@courier_bp.route("/shipments/<int:shipment_id>/receipt")
+@login_required(role="courier")
+def print_receipt(shipment_id):
+    courier = _get_courier()
+    shipment = Shipment.query.filter_by(id=shipment_id, assigned_courier_id=courier.id).first_or_404()
+    if shipment.latest_status() != "Delivered":
+        abort(404)
+    delivered_event = find_latest_delivered_event(shipment)
+    if not delivered_event:
+        abort(404)
+    pdf_bytes = build_receipt_pdf(shipment, delivered_event)
+    filename = f"{shipment.tracking_number}-receipt.pdf"
+    return send_file(
+        BytesIO(pdf_bytes),
+        mimetype="application/pdf",
+        as_attachment=False,
+        download_name=filename,
+    )
 
 
 @courier_bp.route("/shipments/<int:shipment_id>/track", methods=["GET", "POST"])

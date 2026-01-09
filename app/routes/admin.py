@@ -5,12 +5,13 @@ from datetime import datetime
 import csv
 import io
 
-from flask import Blueprint, Response, flash, redirect, render_template, request, url_for
+from flask import Blueprint, Response, abort, flash, redirect, render_template, request, send_file, url_for
 from sqlalchemy import func
 
 from app import db
 from app.auth_utils import hash_password, login_required
 from app.models import Courier, Customer, Shipment, TrackingEvent
+from app.print_utils import build_receipt_pdf, build_shipment_pdf, find_latest_delivered_event
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -375,6 +376,39 @@ def create_shipment():
 def shipment_detail(shipment_id):
     shipment = Shipment.query.get_or_404(shipment_id)
     return render_template("admin/shipment_detail.html", shipment=shipment)
+
+
+@admin_bp.route("/shipments/<int:shipment_id>/print")
+@login_required(role="admin")
+def print_shipment(shipment_id):
+    shipment = Shipment.query.get_or_404(shipment_id)
+    pdf_bytes = build_shipment_pdf(shipment)
+    filename = f"{shipment.tracking_number}.pdf"
+    return send_file(
+        io.BytesIO(pdf_bytes),
+        mimetype="application/pdf",
+        as_attachment=False,
+        download_name=filename,
+    )
+
+
+@admin_bp.route("/shipments/<int:shipment_id>/receipt")
+@login_required(role="admin")
+def print_receipt(shipment_id):
+    shipment = Shipment.query.get_or_404(shipment_id)
+    if shipment.latest_status() != "Delivered":
+        abort(404)
+    delivered_event = find_latest_delivered_event(shipment)
+    if not delivered_event:
+        abort(404)
+    pdf_bytes = build_receipt_pdf(shipment, delivered_event)
+    filename = f"{shipment.tracking_number}-receipt.pdf"
+    return send_file(
+        io.BytesIO(pdf_bytes),
+        mimetype="application/pdf",
+        as_attachment=False,
+        download_name=filename,
+    )
 
 
 @admin_bp.route("/shipments/<int:shipment_id>/edit")

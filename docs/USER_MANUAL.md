@@ -22,6 +22,7 @@ Web-based shipment tracking for store/warehouse operations. Roles: Admin (manage
 - Shipments: list, create (auto tracking #), assign courier, edit, view timeline, delete.
 - Reports: filter by date range, courier, status; view shipments per day/courier and delivered vs total.
 - Support tickets (extra): browse tickets, update status, add comments.
+- Print shipment PDF and delivery receipt (delivered only) from shipment detail.
 - Common flow:
   1. Log in as admin and open Dashboard for quick stats.
   2. Use the nav pills to manage customers/couriers/shipments.
@@ -34,6 +35,7 @@ Web-based shipment tracking for store/warehouse operations. Roles: Admin (manage
 - Dashboard shows assigned shipments.
 - Shipment detail: view info and timeline.
 - Add tracking event: status, location, notes, and optional proof link.
+- Print shipment PDF and delivery receipt (delivered only) from shipment detail.
 - Common flow:
   1. Log in as courier to reach the dashboard.
   2. Search or click into a shipment to see details and history.
@@ -42,6 +44,7 @@ Web-based shipment tracking for store/warehouse operations. Roles: Admin (manage
 ## Customer/Public
 - Track page: `http://127.0.0.1:5000/track`
 - Enter tracking number to see current status and full timeline.
+- Print shipment PDF and delivery receipt (delivered only) from the tracking result.
 - Common flow:
   1. Open the track page.
   2. Enter tracking number and submit.

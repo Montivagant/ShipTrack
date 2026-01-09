@@ -41,7 +41,7 @@ A simple Flask + SQLite web app for managing customers, couriers, shipments, and
 - `docs/` Architecture, API, and user manual
 
 ## Notes
-- Stack: Flask, SQLAlchemy, SQLite, Jinja2 templates, Bootstrap 5 via CDN, bcrypt for passwords.
+- Stack: Flask, SQLAlchemy, SQLite, Jinja2 templates, Bootstrap 5 via CDN, bcrypt for passwords, fpdf2 for PDFs.
 - Extra: lightweight support tickets (public submit, admin respond) and proof links on tracking events.
 - Keep `SECRET_KEY` and passwords secure in production.
 
@@ -53,3 +53,4 @@ A simple Flask + SQLite web app for managing customers, couriers, shipments, and
 - Edit shipment and assign courier; new "Assigned" event appears.
 - Courier login; sees only assigned shipments; can add tracking event (with proof link) and see it appear.
 - Public tracking page finds shipment by tracking number and shows timeline; unknown tracking shows friendly message.
+- Print shipment PDF from public/courier/admin views; receipt prints only when status is Delivered.
